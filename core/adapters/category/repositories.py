@@ -8,7 +8,8 @@ from .models import CategoryModel
 class CategoryRepository(ICategoryRepository):
     def get_all(self) -> list[Category]:
         """Retrieve all categories that have not been deleted."""
-        categories = CategoryModel.objects.filter(deleted_at__isnull=True)
+        categories = CategoryModel.objects.filter(
+            deleted_at__isnull=True).order_by("id")
         return [self._to_entity(cat) for cat in categories]
 
     def get_by_id(self, category_id: int) -> Category:
@@ -35,7 +36,6 @@ class CategoryRepository(ICategoryRepository):
     def add(self, category: Category) -> Category:
         """Add a new category."""
         try:
-            print(category.description)
             category_model = CategoryModel(
                 name=category.name,
                 description=category.description
