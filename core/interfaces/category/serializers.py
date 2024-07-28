@@ -15,7 +15,7 @@ class CategorySerializer(serializers.Serializer):
 class CategoryCreateSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=255)
-    description = serializers.CharField(max_length=1000, allow_blank=True)
+    description = serializers.CharField(max_length=1000, required=False)
 
 
 class CategoryUpdateSerializer(serializers.Serializer):

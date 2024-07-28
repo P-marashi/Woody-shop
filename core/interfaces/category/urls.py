@@ -1,7 +1,16 @@
-from django.urls import path
-from .views import CategoryListView, CategoryDetailView
+# core/urls.py
 
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from core.interfaces.category.views import CategoryViewSet
+
+# Initialize the router
+router = DefaultRouter()
+
+# Register the CategoryViewSet
+router.register(r'categories', CategoryViewSet, basename='category')
+
+# Include the router URLs in the urlpatterns
 urlpatterns = [
-    path('categories/', CategoryListView.as_view(), name='category-list'),
-    path('categories/<int:category_id>/', CategoryDetailView.as_view(), name='category-detail'),
+    path('', include(router.urls)),
 ]

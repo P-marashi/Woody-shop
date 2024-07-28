@@ -134,7 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
-    "EXCEPTION_HANDLER": "core.interfaces.apis.exception_handlers.drf_default_with_modifications_exception_handler",  # Make sure this file and function exist
+    # "EXCEPTION_HANDLER": "core.interfaces.apis.exception_handlers.drf_default_with_modifications_exception_handler",  # Make sure this file and function exist
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

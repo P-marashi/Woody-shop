@@ -7,7 +7,7 @@ class CreateCategoryUseCase:
     def __init__(self, repository: ICategoryRepository):
         self.repository = repository
 
-    def execute(self, name: str, description: str = "") -> Category:
+    def execute(self, name: str, description: str) -> Category:
         existing_category = self.repository.get_by_name(name)
         if existing_category:
             raise DuplicateCategoryError(f"Category with name '{name}' already exists.")

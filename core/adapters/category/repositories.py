@@ -35,6 +35,7 @@ class CategoryRepository(ICategoryRepository):
     def add(self, category: Category) -> Category:
         """Add a new category."""
         try:
+            print(category.description)
             category_model = CategoryModel(
                 name=category.name,
                 description=category.description
