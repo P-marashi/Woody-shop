@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+
+  assets_db:
+    container_name: assets_db
+    image: git.moallem.sch.ir:5050/registry/mariadb:10.9.3
+    environment:
+      - MARIADB_ROOT_PASSWORD=aliomega12
+      - MARIADB_DATABASE=assets
+      - MARIADB_USER=admin
+      - MYSQL_PASSWORD=aliomega12
+    volumes:
+      - assets_data:/var/lib/mysql
+    expose:
+      - 3306
+    networks:
+      - master
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: on-failure
+
+  assets_redis:
+    container_name: assets_redis
+    image: git.moallem.sch.ir:5050/registry/redis:7.2.3
+    networks:
+      - master
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: on-failure
+
+  assets_api:
+    container_name: assets_api
+    build:
+      context: .
+      dockerfile: docker/production.Dockerfile
+    command: docker/entrypoints/web_entrypoint.sh
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DATABASE_URL=mysql://admin:aliomega12@assets_db:3306/assets
+      - CELERY_BROKER_URL=redis://assets_redis:6379/0
+      - CACHE_URL=redis://assets_redis:6379/1
+    volumes:
+      - .:/app
+    networks:
+      - master
+    ports:
+      - "8035:8035"
+    depends_on:
+      assets_db:
+          condition: service_healthy
+      assets_redis:
+        condition: service_healthy
+    restart: on-failure
+
+  assets_celery:
+    container_name: assets_celery
+    build:
+      context: .
+      dockerfile: docker/production.Dockerfile
+    command: docker/entrypoints/celery_entrypoint.sh
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DATABASE_URL=mysql://admin:aliomega12@assets_db:3306/assets
+      - CELERY_BROKER_URL=redis://assets_redis:6379/0
+      - CACHE_URL=redis://assets_redis:6379/1
+    volumes:
+      - .:/app
+    networks:
+      - master
+    depends_on:
+      assets_db:
+        condition: service_healthy
+      assets_redis:
+        condition: service_healthy
+    restart: on-failure
+
+volumes:
+    assets_data:
+
+networks:
+  master:
+    external: true

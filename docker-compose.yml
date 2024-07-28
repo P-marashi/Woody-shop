@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+
+  db:
+    container_name: woody-database
+    image: mariadb:10.9.3
+    environment:
+      - MARIADB_ROOT_PASSWORD=pouya
+      - MARIADB_DATABASE=woody
+      - MARIADB_USER=admin
+      - MYSQL_PASSWORD=pouya
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: on-failure
+
+volumes:
+    mariadb_data:
