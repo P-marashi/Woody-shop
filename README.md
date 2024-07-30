@@ -120,5 +120,5 @@ Follow these steps to get your development environment up and running.
 
 For questions, feedback, or contributions, you can reach out to me via:
 
-- **Email**: [pouyamarashii@gmail.com]
-- **LinkedIn**: [www.linkedin.com/in/pouyamarashii]
+- **Email**: pouyamarashii@gmail.com
+- **LinkedIn**: www.linkedin.com/in/pouyamarashii
