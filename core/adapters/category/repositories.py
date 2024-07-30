@@ -1,8 +1,11 @@
+import datetime
+from .models import CategoryModel
 from django.db import IntegrityError, transaction
 from core.entities.category.categories import Category
-from core.exception.category.exceptions import DuplicateCategoryError
 from core.interfaces.category.repositories import ICategoryRepository
-from .models import CategoryModel
+from core.exception.category.exceptions import (
+    DuplicateCategoryError,
+    CategoryNotFoundError)
 
 
 class CategoryRepository(ICategoryRepository):
@@ -20,7 +23,7 @@ class CategoryRepository(ICategoryRepository):
             )
             return self._to_entity(category)
         except CategoryModel.DoesNotExist:
-            raise ValueError("Category not found")
+            raise CategoryNotFoundError("Category not found")
 
     def get_by_name(self, name: str) -> Category:
         """Retrieve a category by its name."""
@@ -67,14 +70,13 @@ class CategoryRepository(ICategoryRepository):
 
             category_model.name = category.name
 
-            # Only update the description if a new one is provided
             if category.description:
                 category_model.description = category.description
 
             category_model.save()
             return self._to_entity(category_model)
         except CategoryModel.DoesNotExist:
-            raise ValueError("Category not found")
+            raise CategoryNotFoundError("Category not found")
         except IntegrityError:
             raise DuplicateCategoryError(
                 f"Category with name '{category.name}' already exists."
@@ -87,9 +89,10 @@ class CategoryRepository(ICategoryRepository):
             category = CategoryModel.objects.get(
                 id=category_id, deleted_at__isnull=True
             )
-            category.delete()
+            category.deleted_at = datetime.datetime.now()
+            category.save()
         except CategoryModel.DoesNotExist:
-            raise ValueError("Category not found")
+            raise CategoryNotFoundError("Category not found")
 
     def _to_entity(self, model: CategoryModel) -> Category:
         """Convert a CategoryModel instance to a Category entity."""

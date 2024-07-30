@@ -66,17 +66,17 @@ class CategoryViewSet(viewsets.ViewSet):
             try:
                 created_category = use_case.execute(
                     name=serializer.validated_data["name"],
-                    description=serializer.validated_data.get("description", "ندارد"),
+                    description=serializer.validated_data.get("description", ""),
                 )
 
                 response_serializer = CategorySerializer(created_category)
                 return Response(
-                    response_serializer.data, 
+                    response_serializer.data,
                     status=status.HTTP_201_CREATED
                 )
             except DuplicateCategoryError as e:
                 return Response(
-                    {"error": str(e)}, 
+                    {"error": str(e)},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -113,7 +113,7 @@ class CategoryViewSet(viewsets.ViewSet):
                 )
                 response_serializer = CategorySerializer(updated_category)
                 return Response(
-                    response_serializer.data, 
+                    response_serializer.data,
                     status=status.HTTP_200_OK
                 )
             except DuplicateCategoryError as e:
