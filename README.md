@@ -5,12 +5,11 @@ Welcome to **Woody Shop**, a robust and scalable web application built using Dja
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Project Structure](#project-structure)
-3. [Features](#features)
-4. [Technology Stack](#technology-stack)
-5. [Prerequisites](#prerequisites)
-6. [Installation](#installation)
-7. [Contact](#contact)
+2. [Features](#features)
+3. [Technology Stack](#technology-stack)
+4. [Prerequisites](#prerequisites)
+5. [Installation](#installation)
+6. [Contact](#contact)
 
 ## Project Overview
 
